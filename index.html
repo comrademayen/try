@@ -95,7 +95,7 @@
                              <i class="fas fa-link w-6"></i>
                             <span class="ml-3">Connections</span>
                         </a>
-                        <a href="#" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200 rounded-lg">
+                        <a href="#" onclick="showPage('settingsPage')" data-page="settingsPage" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200 rounded-lg">
                             <i class="fas fa-cog w-6"></i>
                             <span class="ml-3">Settings</span>
                         </a>
@@ -256,6 +256,63 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Settings Page Content -->
+                             <div id="settingsPageContent" class="page-content hidden">
+                                <h3 class="text-3xl font-medium text-gray-700">Settings</h3>
+                                <div class="mt-8 bg-white p-8 rounded-2xl shadow-lg">
+                                    <h4 class="text-xl font-semibold text-gray-800">Firebase Configuration Fix</h4>
+                                    <p class="mt-2 text-gray-600">If you see an "unauthorized-domain" error when connecting accounts, you must authorize the domain where this app is running.</p>
+                                    
+                                    <div class="mt-6">
+                                        <label class="block text-sm font-medium text-gray-700">Your App's Current Domain:</label>
+                                        <div class="mt-1 flex rounded-md shadow-sm">
+                                            <input type="text" id="authorizedDomain" readonly class="flex-1 block w-full rounded-none rounded-l-md px-3 py-2 border border-gray-300 bg-gray-100 text-gray-600 focus:outline-none">
+                                            <button id="copyDomainButton" class="inline-flex items-center px-4 py-2 border border-l-0 border-gray-300 rounded-r-md bg-gray-50 text-sm font-medium text-gray-700 hover:bg-gray-100">
+                                                <i class="fas fa-copy mr-2"></i>
+                                                Copy
+                                            </button>
+                                        </div>
+                                         <div id="copy-success" class="hidden mt-2 text-sm text-green-600">Domain copied to clipboard!</div>
+                                    </div>
+
+                                    <div class="mt-8 border-t pt-6">
+                                        <h5 class="text-lg font-medium text-gray-800">Instructions:</h5>
+                                        <ol class="list-decimal list-inside mt-2 space-y-2 text-gray-600">
+                                            <li>Go to the <a href="https://console.firebase.google.com/" target="_blank" class="text-blue-600 hover:underline">Firebase Console</a> and select your project (`socialmanage-1e7eb`).</li>
+                                            <li>From the side menu, go to **Authentication**.</li>
+                                            <li>Click on the **Settings** tab.</li>
+                                            <li>Under the "Authorized domains" section, click **Add domain**.</li>
+                                            <li>Paste the domain you copied above into the box and click **Add**.</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                                <div class="mt-8 bg-white p-8 rounded-2xl shadow-lg">
+                                    <h4 class="text-xl font-semibold text-gray-800">Google Verification Status</h4>
+                                    <p class="mt-2 text-gray-600">When connecting your YouTube account, you may see a screen that says "Google hasn't verified this app." This is normal for new applications.</p>
+
+                                    <div class="mt-6">
+                                        <h5 class="text-lg font-medium text-gray-800">For Testing (Immediate Fix):</h5>
+                                        <p class="mt-1 text-gray-600">You can safely bypass this warning for your own account to continue testing.</p>
+                                        <ol class="list-decimal list-inside mt-2 space-y-2 text-gray-600">
+                                            <li>On the warning screen, click **"Advanced"**.</li>
+                                            <li>Click on **"Go to OnePost (unsafe)"**.</li>
+                                            <li>Grant the permissions to connect your account.</li>
+                                        </ol>
+                                    </div>
+                                    
+                                    <div class="mt-8 border-t pt-6">
+                                        <h5 class="text-lg font-medium text-gray-800">For Production (Public App):</h5>
+                                        <p class="mt-1 text-gray-600">To remove this warning for all users, you must submit your app to Google for verification. This involves setting up your OAuth consent screen.</p>
+                                        <ol class="list-decimal list-inside mt-2 space-y-2 text-gray-600">
+                                            <li>Go to the <a href="https://console.cloud.google.com/apis/credentials/consent" target="_blank" class="text-blue-600 hover:underline">Google Cloud Console API & Services</a> page.</li>
+                                            <li>Select your project (`socialmanage-1e7eb`).</li>
+                                            <li>Configure the **OAuth consent screen** with your application's name, logo, privacy policy URL, and terms of service URL.</li>
+                                            <li>Once configured, you can submit the app for verification.</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                             </div>
                         </div>
                     </main>
                 </div>
@@ -265,22 +322,6 @@
     
     <!-- Firebase Integration -->
     <script type="module">
-        // ===================================================================================
-        //  IMPORTANT: FIX FOR 'auth/unauthorized-domain' ERROR
-        // ===================================================================================
-        // This error means the domain you are running the app from is not allowed by Firebase.
-        // To fix this, you MUST do the following:
-        // 1. Go to your Firebase project: https://console.firebase.google.com/
-        // 2. Go to the "Authentication" section.
-        // 3. Click on the "Settings" tab.
-        // 4. Click on the "Authorized domains" section.
-        // 5. Click "Add domain" and enter the domain where you see this error.
-        //    - If you are running locally or in a development environment like this one,
-        //      the domain might be something like `2qxisy...-h769614562.scf.usercontent.goog`.
-        //      You must copy the EXACT domain from your browser's address bar (without https://).
-        // ===================================================================================
-
-
         // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
         import { 
@@ -375,6 +416,10 @@
         const connectFacebookBtn = document.getElementById('connect-facebook-btn');
         const youtubeStatusEl = document.getElementById('youtube-status');
         const facebookStatusEl = document.getElementById('facebook-status');
+        const authorizedDomainInput = document.getElementById('authorizedDomain');
+        const copyDomainButton = document.getElementById('copyDomainButton');
+        const copySuccessMessage = document.getElementById('copy-success');
+
 
         // --- UI Interactivity ---
         window.showPage = (pageId) => {
@@ -392,6 +437,9 @@
             }
              if (pageId === 'connectionsPage') {
                 checkConnectionStatus();
+            }
+             if (pageId === 'settingsPage') {
+                updateSettingsPage();
             }
         };
         
@@ -711,6 +759,20 @@
             videoUploadInput.value = '';
             videoDropzone.classList.remove('hidden');
             videoUploadName.classList.add('hidden');
+        });
+        
+        // --- Settings Page Helpers ---
+        const updateSettingsPage = () => {
+            authorizedDomainInput.value = window.location.hostname;
+        };
+
+        copyDomainButton.addEventListener('click', () => {
+            authorizedDomainInput.select();
+            document.execCommand('copy');
+            copySuccessMessage.classList.remove('hidden');
+            setTimeout(() => {
+                copySuccessMessage.classList.add('hidden');
+            }, 2000);
         });
 
     </script>
