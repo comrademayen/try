@@ -30,6 +30,12 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        .info-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #17a2b8;
+            padding: 1rem;
+            border-radius: 0.25rem;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -259,13 +265,21 @@
 
                             <!-- Settings Page Content -->
                              <div id="settingsPageContent" class="page-content hidden">
-                                <h3 class="text-3xl font-medium text-gray-700">Settings</h3>
+                                <h3 class="text-3xl font-medium text-gray-700">Settings & Troubleshooting</h3>
+                                
                                 <div class="mt-8 bg-white p-8 rounded-2xl shadow-lg">
-                                    <h4 class="text-xl font-semibold text-gray-800">Firebase Configuration Fix</h4>
-                                    <p class="mt-2 text-gray-600">If you see an "unauthorized-domain" error when connecting accounts, you must authorize the domain where this app is running.</p>
+                                    <h4 class="text-xl font-semibold text-gray-800">Connection Error Fixes</h4>
+                                    <p class="mt-2 text-gray-600">If you are having trouble connecting your accounts, please follow these steps.</p>
                                     
-                                    <div class="mt-6">
-                                        <label class="block text-sm font-medium text-gray-700">Your App's Current Domain:</label>
+                                    <div class="mt-6 info-box">
+                                        <h5 class="font-bold text-gray-800">About Client IDs and Secrets</h5>
+                                        <p class="mt-1 text-sm text-gray-700">Your Google Client ID and Secret are used by Firebase on the backend. **You must never put the Client Secret into this frontend code.** The connection issues are solved by configuring your project correctly in the Firebase and Google Cloud consoles, not by adding secrets here.</p>
+                                    </div>
+
+                                    <div class="mt-8">
+                                        <h5 class="text-lg font-medium text-gray-800">Step 1: Fix "Unauthorized Domain" Error</h5>
+                                        <p class="mt-1 text-gray-600">This error stops the login pop-up from working correctly.</p>
+                                        <label class="block text-sm font-medium text-gray-700 mt-4">Your App's Current Domain:</label>
                                         <div class="mt-1 flex rounded-md shadow-sm">
                                             <input type="text" id="authorizedDomain" readonly class="flex-1 block w-full rounded-none rounded-l-md px-3 py-2 border border-gray-300 bg-gray-100 text-gray-600 focus:outline-none">
                                             <button id="copyDomainButton" class="inline-flex items-center px-4 py-2 border border-l-0 border-gray-300 rounded-r-md bg-gray-50 text-sm font-medium text-gray-700 hover:bg-gray-100">
@@ -274,41 +288,37 @@
                                             </button>
                                         </div>
                                          <div id="copy-success" class="hidden mt-2 text-sm text-green-600">Domain copied to clipboard!</div>
-                                    </div>
-
-                                    <div class="mt-8 border-t pt-6">
-                                        <h5 class="text-lg font-medium text-gray-800">Instructions:</h5>
-                                        <ol class="list-decimal list-inside mt-2 space-y-2 text-gray-600">
+                                        <ol class="list-decimal list-inside mt-4 space-y-2 text-gray-600 text-sm">
                                             <li>Go to the <a href="https://console.firebase.google.com/" target="_blank" class="text-blue-600 hover:underline">Firebase Console</a> and select your project (`socialmanage-1e7eb`).</li>
-                                            <li>From the side menu, go to **Authentication**.</li>
-                                            <li>Click on the **Settings** tab.</li>
-                                            <li>Under the "Authorized domains" section, click **Add domain**.</li>
-                                            <li>Paste the domain you copied above into the box and click **Add**.</li>
+                                            <li>From the side menu, go to **Authentication** -> **Settings** tab.</li>
+                                            <li>Under "Authorized domains", click **Add domain**.</li>
+                                            <li>Paste the domain you copied above and click **Add**.</li>
                                         </ol>
                                     </div>
                                 </div>
+
                                 <div class="mt-8 bg-white p-8 rounded-2xl shadow-lg">
-                                    <h4 class="text-xl font-semibold text-gray-800">Google Verification Status</h4>
-                                    <p class="mt-2 text-gray-600">When connecting your YouTube account, you may see a screen that says "Google hasn't verified this app." This is normal for new applications.</p>
+                                    <h4 class="text-xl font-semibold text-gray-800">Step 2: Handle "Google hasn't verified this app"</h4>
+                                    <p class="mt-2 text-gray-600">This warning is normal for new apps. You can bypass it for testing or submit for verification for public use.</p>
 
                                     <div class="mt-6">
                                         <h5 class="text-lg font-medium text-gray-800">For Testing (Immediate Fix):</h5>
-                                        <p class="mt-1 text-gray-600">You can safely bypass this warning for your own account to continue testing.</p>
-                                        <ol class="list-decimal list-inside mt-2 space-y-2 text-gray-600">
-                                            <li>On the warning screen, click **"Advanced"**.</li>
-                                            <li>Click on **"Go to OnePost (unsafe)"**.</li>
+                                        <p class="mt-1 text-gray-600">You can safely bypass this warning for your own account.</p>
+                                        <ol class="list-decimal list-inside mt-2 space-y-2 text-gray-600 text-sm">
+                                            <li>When the Google pop-up appears, click **"Advanced"**.</li>
+                                            <li>Click the link at the bottom that says **"Go to OnePost (unsafe)"**.</li>
                                             <li>Grant the permissions to connect your account.</li>
                                         </ol>
                                     </div>
                                     
                                     <div class="mt-8 border-t pt-6">
                                         <h5 class="text-lg font-medium text-gray-800">For Production (Public App):</h5>
-                                        <p class="mt-1 text-gray-600">To remove this warning for all users, you must submit your app to Google for verification. This involves setting up your OAuth consent screen.</p>
-                                        <ol class="list-decimal list-inside mt-2 space-y-2 text-gray-600">
+                                        <p class="mt-1 text-gray-600">To remove this warning for all users, you must complete your "OAuth consent screen" in Google Cloud and submit it for verification.</p>
+                                        <ol class="list-decimal list-inside mt-2 space-y-2 text-gray-600 text-sm">
                                             <li>Go to the <a href="https://console.cloud.google.com/apis/credentials/consent" target="_blank" class="text-blue-600 hover:underline">Google Cloud Console API & Services</a> page.</li>
                                             <li>Select your project (`socialmanage-1e7eb`).</li>
-                                            <li>Configure the **OAuth consent screen** with your application's name, logo, privacy policy URL, and terms of service URL.</li>
-                                            <li>Once configured, you can submit the app for verification.</li>
+                                            <li>Fill out your app name, support email, logos, and links to your privacy policy and terms of service.</li>
+                                            <li>Save the consent screen and then submit it for verification.</li>
                                         </ol>
                                     </div>
                                 </div>
